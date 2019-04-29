@@ -1,7 +1,7 @@
 module.exports = {
-    which_state_are_you_gonna_train: which_state_are_you_gonna_train,
-    go_to_dict_main: go_to_dict_main,
-    generate_audio_file: generate_audio_file,
+    //which_state_are_you_gonna_train: which_state_are_you_gonna_train,
+    //go_to_dict_main: go_to_dict_main,
+    //generate_audio_file: generate_audio_file,
     generate_aam
 }
 
@@ -10,7 +10,7 @@ const serv = instances.server
 const c = console.log
 let IN_PROCESS = false
 
-function which_state_are_you_gonna_train(user) {
+/*function which_state_are_you_gonna_train(user) {
     if (IN_PROCESS) {
         user.send('ААМ-файл находится в состоянии генерации. Скоро закончу и пришлю его.')
         return
@@ -49,9 +49,9 @@ function which_state_are_you_gonna_train(user) {
         } else
             user.send('Для генерации ААМ-файлов, в словаре должны фразы на стадии 🇬🇧🎧 или выше.')
     })
-}
+}*/
 
-function generate_audio_file(user, nextStep) {
+/*function generate_audio_file(user, nextStep) {
     if (user.input.body == '🇬🇧📖')
         type = 'text'
     else if (user.input.body == '🇬🇧🎧')
@@ -86,13 +86,13 @@ function generate_audio_file(user, nextStep) {
             console.log(file)
         }
     })
-}
+}*/
 
-function go_to_dict_main(user, nextStep) {
+/*function go_to_dict_main(user, nextStep) {
     delete user.studing
     user.state = 'dict_main'
     nextStep(user)
-}
+}*/
 
 function generate_aam(user, nextStep) {
     if (IN_PROCESS) {

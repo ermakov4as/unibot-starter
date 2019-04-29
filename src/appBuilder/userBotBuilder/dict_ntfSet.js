@@ -1,8 +1,8 @@
 module.exports = {
-    show_settings: show_settings,
-    go_to_dict_main: go_to_dict_main,
-    switch_power: switch_power,
-    define_attr_and_go_to_set_it: define_attr_and_go_to_set_it
+    show_settings,
+    go_to_main,
+    switch_power,
+    define_attr_and_go_to_set_it
 }
 
 const h = require('./../../instances').help
@@ -23,8 +23,8 @@ function show_settings(user) {
     user.done('Текущие настройки')
 }
 
-function go_to_dict_main(user, nextStep) {
-    user.state = 'dict_main'
+function go_to_main(user, nextStep) {
+    user.state = 'main'
     nextStep(user)
 }
 

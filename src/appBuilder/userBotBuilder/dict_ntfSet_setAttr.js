@@ -1,7 +1,7 @@
 module.exports = {
-    getting_value: getting_value,
-    go_to_dict_ntfSet: go_to_dict_ntfSet,
-    write_value: write_value
+    getting_value,
+    go_to_dict_ntfSet,
+    write_value
 }
 
 const h = require('../../instances').help
@@ -20,7 +20,11 @@ function getting_value(user) {
         user.done('До какого времени мне присылать сообщения?')
     }
     if (user.ntf.curSet == 'period') {
-        user.addKeyboard([['15 мин', '30 мин', '1 ч', '1.5 ч'], ['2 ч', '3 ч', '5 ч', '8 ч'], ['⬅️']])
+        user.addKeyboard([
+            ['15 мин', '30 мин', '1 ч', '1.5 ч'],
+            ['2 ч', '3 ч', '5 ч', '8 ч'],
+            ['⬅️']
+        ])
         user.done('С какой частотой мне присылать сообщения')
     }
 }
@@ -58,5 +62,3 @@ function write_value(user, nextStep) {
     user.state = 'dict_ntfSet'
     nextStep(user)
 }
-
-

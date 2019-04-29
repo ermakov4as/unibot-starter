@@ -57,7 +57,7 @@ userBot.addState('auth_help')
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////                       MAIN                    //////////////
-/////////////////////////////////////////////////////////////////////////// //////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 
 userBot.addState('main')
     .addFsx(ubb.main.show_practice_dict_and_dialog)
@@ -66,18 +66,6 @@ userBot.addState('main')
     //.onButton('Аудирование 🎧', ubb.dict_main.go_to('dict_aam')) // TODO: внутри
     .onButton('Аудирование 🎧', ubb.dict_aam.generate_aam)
     .onButton(/Справка ℹ 💬.*/, ubb.main.go_to_help) // TODO: dialog state - убрать лишнее
-
-// ///////////////////////////////////////////////////////////////////////////
-// //////////////                  Словарь                      //////////////
-// ///////////////////////////////////////////////////////////////////////////
-
-/*userBot.addState('dict_main')
-    .addFsx(ubb.dict_main.perfom_abilyties)
-    .onButton('⬅️', ubb.dict_main.go_to('main'))
-    .onButton('Тренировка 🚀', ubb.dict_main.go_to('dict_tren'))
-    .onButton('Добавить 🆕', ubb.dict_main.go_to('dict_addNew'))
-    .onButton('Оповещения 🔔', ubb.dict_main.go_to('dict_ntfSet'))
-    .onButton('ААМ 🎧', ubb.dict_main.go_to('dict_aam'))*/
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////              Словарь. Тренировка 🚀           //////////////
@@ -105,46 +93,12 @@ userBot.addState('dict_tren_checking_confirm') // TODO:
     .onButton('✅ Да', ubb.dict_tren_checking_confirm.remeber_phrase_confirm(true))
     .onButton('⬅️', ubb.dict_tren_checking_confirm.go_to_dict_tren)
 
-
-///////////////////////////////////////////////////////////////////////////
-//////////////               Словарь. Добавить 🆕            //////////////
-///////////////////////////////////////////////////////////////////////////
-
-/*userBot.addState('dict_addNew')
-    .addFsx(ubb.dict_addNew.choose_field_or_save_with_curators_help)
-    .onButton('❌', ubb.dict_addNew.go_to_dict_main)
-    .onButton('⬅️', ubb.dict_addNew.go_to_dict_main)
-    .onButton('🇬🇧', ubb.dict_addNew.recive_field('en'))
-    .onButton('📣🇬🇧', ubb.dict_addNew.recive_field('en'))
-    .onButton('🇷🇺', ubb.dict_addNew.recive_field('ru'))
-    .onButton('📣🇷🇺', ubb.dict_addNew.recive_field('ru'))
-    .onButton('✅', ubb.dict_addNew.saveNewPrhase())
-    .onButton('🎓 📝', ubb.dict_addNew.saveNewPrhase('andParse'))
-    .onButton('🎓 📣', ubb.dict_addNew.saveNewPrhase('andSound'))
-    .onButton('🎓 📝 + 📣', ubb.dict_addNew.saveNewPrhase('parsEndSound'))
-    .onButton('добавить из уроков', ubb.dict_addNew.go_to_dict_add_from_lessons)
-
-userBot.addState('dict_addNew_getting')
-    .addFsx(ubb.dict_addNew_getting.field_defenition)
-    .onText(ubb.dict_addNew_getting.get_field)
-    .onAudio(ubb.dict_addNew_getting.get_field)
-    .onButton('⬅️', ubb.dict_addNew_getting.go_to_dict_addNew)*/
-
-// ///////////////////////////////////////////////////////////////////////////
-// //////////////               Словарь. Озвучить 📣            //////////////
-// ///////////////////////////////////////////////////////////////////////////
-
-/*userBot.addState('dict_selfSound')
-    .addFsx(ubb.dict_selfSound.getNextSound)
-    .onAudio(ubb.dict_selfSound.save_audio)
-    .onButton('⬅️', ubb.dict_selfSound.go_to_dict_main)*/
-
 ///////////////////////////////////////////////////////////////////////////
 //////////////              Словарь. Оповещения 🔔           //////////////
 ///////////////////////////////////////////////////////////////////////////
 
 userBot.addState('dict_ntfSet').addFsx(ubb.dict_ntfSet.show_settings)
-    .onButton('⬅️', ubb.dict_ntfSet.go_to_dict_main)
+    .onButton('⬅️', ubb.dict_ntfSet.go_to_main)
     .onButton('🔔', ubb.dict_ntfSet.switch_power)
     .onButton('🔕', ubb.dict_ntfSet.switch_power)
     .onText(ubb.dict_ntfSet.define_attr_and_go_to_set_it)
@@ -154,34 +108,9 @@ userBot.addState('dict_ntfSet_setAttr')
     .onButton('⬅️', ubb.dict_ntfSet_setAttr.go_to_dict_ntfSet)
     .onText(ubb.dict_ntfSet_setAttr.write_value)
 
-///////////////////////////////////////////////////////////////////////////
-//////////////              Словарь. ААМ 🎧                  //////////////
-///////////////////////////////////////////////////////////////////////////
-
-userBot.addState('dict_aam').addFsx(ubb.dict_aam.get_aam_status)
-    .onButton('⬅️', ubb.dict_aam.go_to_dict_main)
-    .onText(ubb.dict_aam.generate_audio_file)
-
-// ///////////////////////////////////////////////////////////////////////////
-// //////////////                  Практика  💣                 //////////////
-// ///////////////////////////////////////////////////////////////////////////
-
-userBot.addState('practice_lessons')
-    .addFsx(ubb.practice_lessons.get_lessons)
-    .onButton(/.*Урок.*/, ubb.practice_lessons.go_to_practice_getting_task)
-    .onButton('⬅️', ubb.practice_lessons.go_to_main)
-
-userBot.addState('practice_getting_task')
-    .addFsx(ubb.practice_getting_task.get_next_task_in_lesson)
-    .onButton('⬅️', ubb.practice_getting_task.go_to_practice_lessons)
-    .onText(ubb.practice_getting_task.get_en_text)
-    .onButton('Пропустить озвучку', ubb.practice_getting_task.save_task)
-    .onAudio(ubb.practice_getting_task.get_audio_and_save)
-
-
 // ///////////////////////////////////////////////////////////////////////////
 // //////////////                Диалог. Диалог 💬              //////////////
-// ///////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////// // TODO:
 
 userBot.addState('dialog')
     .addFsx(ubb.dialog.getting_messages)
