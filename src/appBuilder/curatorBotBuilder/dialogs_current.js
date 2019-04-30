@@ -38,7 +38,7 @@ function send_message_to_user_by_id(curator, user_id) {
             let chunk = msg
             msg = client.insertAttrs(msg)
             if (!msg && !SENDED) {
-                curator.send(`Пользователь ${client.name} (${client.id}) не получил сообщение: «${chunk}», потому что нет каких-то аттрибутов\nВозможно таких людей больше!`)
+                curator.send(`Пользователь ${client.name} (${client.id}) не получил сообщение: «${chunk}», потому что нет каких-то аттрибутов\nВозможно таких людей больше! (сообщение не отправлено)`)
                 SENDED = true
                 return
             }
@@ -49,19 +49,10 @@ function send_message_to_user_by_id(curator, user_id) {
             datetime: new Date().getTime(),
             curator: curator.name
         }
-        if (!client.key && curator.input.type == 'text')
-            _send_to_anutorize_user(msg, client)
-        else if (client.state == 'dialog' || client.state == 'auth_help') {
-            if (msg)
-                send_by_type(client, curator.input.type, msg)
-            else if (!SENDED) {
-                curator.send(`Попытка передать пустое сообщение пользователю`)
-                SENDED = true
-                return
-            }
-        }
+        if (client.state == 'main')
+            send_by_type(client, curator.input.type, msg)
         else
-            newMsg['new'] = true
+            client.newMsg = newMsg['new'] = true
         client.messages.push(newMsg)
         client.save()
         curBot.applyToEveryOne((otherCurator) => {
@@ -72,18 +63,9 @@ function send_message_to_user_by_id(curator, user_id) {
                     otherCurator.addMessage('🎓 ' + curator.name + ': ')
                     send_by_type(otherCurator, curator.input.type, msg)
                 }
-
             }
         })
     })
-}
-
-
-function _send_to_anutorize_user(text, client) {
-    client.state = 'auth_help'
-    client.removeKeyboard()
-    send_by_type(client, 'text', text)
-    client.save()
 }
 
 

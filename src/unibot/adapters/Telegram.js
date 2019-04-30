@@ -104,25 +104,16 @@ module.exports = class _Telegram {
         let output = outResult.outputs.shift()
         this.outResultAnswer.outputs.push(output)
         if (output.type == 'text')
-            if (outResult.keyboard) {
-                this.telegram.sendMessage(outResult.local_id, output.body, Telegraf.Extra.markdown().markup((m) => m.keyboard(outResult.keyboard).resize()))
-                    .then((res) => {
-                        output['message_id'] = res.message_id
-                        this.recursiveSending(outResult)
-                    })
-            }
-            else {
-                this.telegram.sendMessage(outResult.local_id, output.body, Telegraf.Extra.markdown().markup((m) => m.removeKeyboard(true)))
-                    .then((res) => {
-                        output['message_id'] = res.message_id
-                        this.recursiveSending(outResult)
-                    })
-            }
+            this.telegram.sendMessage(outResult.local_id, output.body, this.addKeyboard(outResult.keyboard))
+                .then((res) => {
+                    output['message_id'] = res.message_id
+                    this.recursiveSending(outResult)
+                })
         else if (output.type == 'image') {
             if (output.body.indexOf(this.token) == -1) {
                 medServ.getNewUrl('image', output.body, (newUrl) => {
                     output.body = newUrl
-                    this.telegram.sendPhoto(outResult.local_id, output.body)
+                    this.telegram.sendPhoto(outResult.local_id, output.body, this.addKeyboard(outResult.keyboard))
                         .then((res) => {
                             output['message_id'] = res.message_id
                             output['file_id'] = res.photo[res.photo.length - 1].file_id
@@ -130,7 +121,7 @@ module.exports = class _Telegram {
                         })
                 })
             } else {
-                this.telegram.sendPhoto(outResult.local_id, output.file_id ? output.file_id : output.body)
+                this.telegram.sendPhoto(outResult.local_id, output.file_id ? output.file_id : output.body, this.addKeyboard(outResult.keyboard))
                     .then((res) => {
                         output['message_id'] = res.message_id
                         output['file_id'] = res.photo[res.photo.length - 1].file_id
@@ -173,5 +164,12 @@ module.exports = class _Telegram {
                     //TO DO FILE ID
                     this.recursiveSending(outResult)
                 })
+    }
+
+    addKeyboard(keyboard) {
+        if (keyboard)
+            return Telegraf.Extra.markdown().markup((m) => m.keyboard(keyboard).resize())
+        else
+            return Telegraf.Extra.markdown().markup((m) => m.removeKeyboard(true))
     }
 }

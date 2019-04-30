@@ -1,7 +1,7 @@
 module.exports = {
-    //which_state_are_you_gonna_train: which_state_are_you_gonna_train,
-    //go_to_dict_main: go_to_dict_main,
-    //generate_audio_file: generate_audio_file,
+    which_state_are_you_gonna_train: which_state_are_you_gonna_train,
+    go_to_main: go_to_main,
+    generate_audio_file: generate_audio_file,
     generate_aam
 }
 
@@ -9,39 +9,37 @@ const instances = require('../../instances')
 const serv = instances.server
 const c = console.log
 let IN_PROCESS = false
+let MAIN_PARAM= {
+    type: 'будет выбран',
+    count: 100,
+    order: [{ ru: 6 }, { en: 2 }, { en: 2 }]
+}
 
-/*function which_state_are_you_gonna_train(user) {
+function which_state_are_you_gonna_train(user) {
     if (IN_PROCESS) {
         user.send('ААМ-файл находится в состоянии генерации. Скоро закончу и пришлю его.')
         return
     }
     serv.getDictInfo({ key: user.key }, (res) => {
-        let amm = {
-            text: Math.min(res[0].question_audio_count, res[0].answer_audio_count),
-            sound: Math.min(res[1].question_audio_count, res[1].answer_audio_count),
-            reversed: Math.min(res[2].question_audio_count, res[2].answer_audio_count),
-            done: Math.min(res[3].question_audio_count, res[3].answer_audio_count),
-        }
-
-        if (amm.text + amm.sound + amm.reversed + amm.done) {
+        if (res[0].count + res[1].count + res[2].count + res[3].count) {
             let msg = `Фраз в словаре: *${res[0].count + res[1].count + res[2].count + res[3].count}*\n` +
                 `\t\t1. Понимание текста(🇬🇧📖)................${res[0].count}\n` +
                 `\t\t2. Восприятие на слух(🇬🇧🎧)..............${res[1].count}\n` +
                 `\t\t3. Построение фразы(🇷🇺=>🇬🇧)...........${res[2].count}\n` +
                 `\t\tИзучено (✅)............................................${res[3].count}\n` +
-                `Что будем тренировать?`
+                `Из какой стадии взять фразы для генерации ААМ-файла?`
             let keyboard = []
             let hightLine = []
-            if (amm.text)
+            if (res[0].count)
                 hightLine.push('🇬🇧📖')
-            if (amm.sound)
+            if (res[1].count)
                 hightLine.push('🇬🇧🎧')
-            if (amm.reversed)
+            if (res[2].count)
                 hightLine.push('🇷🇺=>🇬🇧')
             if (hightLine.length)
                 keyboard.push(hightLine)
             let lowerLine = ['⬅️']
-            if (amm.reversed)
+            if (res[3].count)
                 lowerLine.push('✅')
             keyboard.push(lowerLine)
             user.addKeyboard(keyboard)
@@ -49,9 +47,9 @@ let IN_PROCESS = false
         } else
             user.send('Для генерации ААМ-файлов, в словаре должны фразы на стадии 🇬🇧🎧 или выше.')
     })
-}*/
+}
 
-/*function generate_audio_file(user, nextStep) {
+function generate_audio_file(user, nextStep) {
     if (user.input.body == '🇬🇧📖')
         type = 'text'
     else if (user.input.body == '🇬🇧🎧')
@@ -64,18 +62,14 @@ let IN_PROCESS = false
         nextStep(user)
         return
     }
-    let req = {
-        key: user.key,
-        type: type,
-        count: 50,
-        order: [{ ru: 6 }, { en: 2 }, { en: 2 }]
-    }
+    MAIN_PARAM.key = user.key
+    MAIN_PARAM.type = type
 
     IN_PROCESS = true
     user.state = 'main'
     user.addMessage('Начал генерировать ААМ–файл. Как закончю, пришлю сообщение👌')
     nextStep(user)
-    serv.getGenerateAAM(req, file => {
+    serv.getGenerateAAM(MAIN_PARAM, file => {
         IN_PROCESS = false
         if (file) {
             user.state = 'main'
@@ -86,13 +80,13 @@ let IN_PROCESS = false
             console.log(file)
         }
     })
-}*/
+}
 
-/*function go_to_dict_main(user, nextStep) {
+function go_to_main(user, nextStep) {
     delete user.studing
-    user.state = 'dict_main'
+    user.state = 'main'
     nextStep(user)
-}*/
+}
 
 function generate_aam(user, nextStep) {
     if (IN_PROCESS) {
@@ -110,13 +104,6 @@ function generate_aam(user, nextStep) {
         user.state = 'main'
         user.addMessage('Начал генерировать ААМ–файл. Как закончю, пришлю сообщение👌')
         nextStep(user)
-            /*serv.getAAM(req, res => { // TODO: 
-                if (res) {
-                    let audio = res.audio
-                    user.sendAudio(audio)
-                    user.send()
-                }
-            })*/
         serv.getGenerateAAM(req, file => {
             IN_PROCESS = false
             if (file) {

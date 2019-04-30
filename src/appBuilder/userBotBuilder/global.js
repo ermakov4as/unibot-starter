@@ -1,11 +1,9 @@
 module.exports = {
     set_last_action_and_ckeck_notify_settings: set_last_action_and_ckeck_notify_settings,
     clean_and_say_bye: clean_and_say_bye,
-    start: start,
-    go_to_dialog: go_to_dialog
+    start: start
 }
 
-const t4 = require('./../../instances').time4
 const c = console.log
 
 function set_last_action_and_ckeck_notify_settings(user, nextStep) {
@@ -51,12 +49,6 @@ function set_last_action_and_ckeck_notify_settings(user, nextStep) {
     nextStep(user)
 }
 
-function go_to_dialog(user, nextStep) {
-    user.helpMe = true
-    user.state = 'auth_help'
-    nextStep(user)
-}
-
 
 function clean_and_say_bye(user) {
     user.clean()
@@ -71,13 +63,9 @@ function clean_and_say_bye(user) {
 function start(user, nextStep) {
     if (user.name && user.key) {
         user.addMessage(`Вы зарегистрированы, как ${user.name}.\nКоманда для выхода: /logout`)
-        user.state = t4.today() > 1 ? 'main' : 'dialog'
-    } else {
-        if (t4.isThreadRun())
-            user.state = 'auth_first'
-        else
-            user.state = 'auth_opinion'
-    }
+        user.state = 'main'
+    } else
+        user.state = 'auth_autorization'
     nextStep(user)
 }
 

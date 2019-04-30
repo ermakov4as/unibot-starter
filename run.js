@@ -22,38 +22,12 @@ userBot.setGlobalHandler()
     .addFsx(ubb.global.set_last_action_and_ckeck_notify_settings)
     .onCommand('/logout', ubb.global.clean_and_say_bye)
     .onCommand('/start', ubb.global.start)
-    .onCommand('/help', ubb.global.go_to_dialog)
     .onButton('🚪', (user) => { user.apply('command', '/start') })
 
-///////////////////////////////////////////////////////////////////////////
-//////////////                  AUTORIZATION                 //////////////
-///////////////////////////////////////////////////////////////////////////
-userBot.addState('auth_first')
-    .addFsx(ubb.auth_first.show_msg_and_you_are_first_time_or_not)
-    .onButton('Зарегистрирован(а)', ubb.auth_first.btn_Im_registered)
-    .onButton('Первый раз', (user, nextStep) => {
-        ubb.dialog.save_msg_and_send_notify_to_curator(user)
-        ubb.auth_first.btn_first_time(user, nextStep)
-    })
-
-userBot.addState('auth_opinion')
-    .addFsx(ubb.auth_opinion.set_poll)
-    .onText((user, nextStep) => {
-        ubb.dialog.save_msg_and_send_notify_to_curator(user)
-        ubb.auth_opinion.recive_poll_by_steps(user, nextStep)
-    })
 
 userBot.addState('auth_autorization')
-    .addFsx(ubb.auth_autorization.show_msg_and_btn_help)
-    .onButton('Помощь', ubb.auth_autorization.go_to_help)
+    .addFsx(ubb.auth_autorization.invite_to_enter_token)
     .onText(ubb.auth_autorization.ckeck_token_in_input)
-
-userBot.addState('auth_help')
-    .addFsx(ubb.auth_help.show_btn_autorize_if_first_time)
-    .onButton('Авторизация 🔑', ubb.auth_help.go_to_autorization)
-    .onButton('⬅️', ubb.auth_help.go_to_main)
-    .onText(ubb.dialog.save_msg_and_send_notify_to_curator)
-    .onImage(ubb.dialog.save_msg_and_send_notify_to_curator)
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////                       MAIN                    //////////////
@@ -61,11 +35,16 @@ userBot.addState('auth_help')
 
 userBot.addState('main')
     .addFsx(ubb.main.show_practice_dict_and_dialog)
-    .onButton('Оповещения 🔔', ubb.dict_main.go_to('dict_ntfSet'))
+    .onButton('Привычка 🔔', ubb.dict_main.go_to('dict_ntfSet'))
     .onButton('Тренажёр 🚀', ubb.main.go_to_dict_tren) // TODO: внутри
-    //.onButton('Аудирование 🎧', ubb.dict_main.go_to('dict_aam')) // TODO: внутри
-    .onButton('Аудирование 🎧', ubb.dict_aam.generate_aam)
-    .onButton(/Справка ℹ 💬.*/, ubb.main.go_to_help) // TODO: dialog state - убрать лишнее
+    .onButton('Аудирование 🎧', ubb.dict_main.go_to('dict_aam'))
+    .onButton('⬅️', ubb.dict_main.go_to('main'))
+    .onButton('Справка ℹ️', ubb.main.get_info)
+    .onText(ubb.dialog.save_msg_and_send_notify_to_curator)
+    .onImage(ubb.dialog.save_msg_and_send_notify_to_curator)
+    .onAudio(ubb.dialog.save_msg_and_send_notify_to_curator)
+    .onVideo(ubb.dialog.save_msg_and_send_notify_to_curator)
+    .onFile(ubb.dialog.save_msg_and_send_notify_to_curator)
 
 ///////////////////////////////////////////////////////////////////////////
 //////////////              Словарь. Тренировка 🚀           //////////////
@@ -94,7 +73,7 @@ userBot.addState('dict_tren_checking_confirm') // TODO:
     .onButton('⬅️', ubb.dict_tren_checking_confirm.go_to_dict_tren)
 
 ///////////////////////////////////////////////////////////////////////////
-//////////////              Словарь. Оповещения 🔔           //////////////
+//////////////                         🔔                    //////////////
 ///////////////////////////////////////////////////////////////////////////
 
 userBot.addState('dict_ntfSet').addFsx(ubb.dict_ntfSet.show_settings)
@@ -108,22 +87,16 @@ userBot.addState('dict_ntfSet_setAttr')
     .onButton('⬅️', ubb.dict_ntfSet_setAttr.go_to_dict_ntfSet)
     .onText(ubb.dict_ntfSet_setAttr.write_value)
 
-// ///////////////////////////////////////////////////////////////////////////
-// //////////////                Диалог. Диалог 💬              //////////////
-// /////////////////////////////////////////////////////////////////////////// // TODO:
+///////////////////////////////////////////////////////////////////////////
+//////////////                        🎧                     //////////////
+///////////////////////////////////////////////////////////////////////////
 
-userBot.addState('dialog')
-    .addFsx(ubb.dialog.getting_messages)
-    .onText(ubb.dialog.save_msg_and_send_notify_to_curator)
-    .onButton('⬅️', ubb.dialog.go_to_main)
-    .onImage(ubb.dialog.save_msg_and_send_notify_to_curator)
-    .onAudio(ubb.dialog.save_msg_and_send_notify_to_curator)
-    .onVideo(ubb.dialog.save_msg_and_send_notify_to_curator)
-    .onFile(ubb.dialog.save_msg_and_send_notify_to_curator)
+userBot.addState('dict_aam')
+    .addFsx(ubb.dict_aam.which_state_are_you_gonna_train)
+    .onButton('⬅️', ubb.dict_aam.go_to_main)
+    .onText(ubb.dict_aam.generate_audio_file)
 
-
-
-/////////////////////////////////////////////////////////////////////////// //////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////
 //////////////                                               //////////////
 //////////////                БОТ КУРАТОРА                   //////////////

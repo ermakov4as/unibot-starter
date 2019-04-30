@@ -1,22 +1,16 @@
 module.exports = {
-    show_msg_and_btn_help: show_msg_and_btn_help,
-    go_to_help: go_to_help,
-    ckeck_token_in_input: ckeck_token_in_input
+    invite_to_enter_token,
+    ckeck_token_in_input
 }
 
 const instances = require('../../instances')
 const serv = instances.server
 
-function show_msg_and_btn_help(user) {
+function invite_to_enter_token(user) {
     user.addMessage('Введи свой токен (который на странице профиля):')
-    user.addKeyboard([['Помощь']])
     user.done()
 }
-function go_to_help(user, nextStep) {
-    user.state = 'auth_help'
-    user.addMessage('Чем могу помочь?')
-    nextStep(user)
-}
+
 function ckeck_token_in_input(user, nextStep) {
     user.send('Проверяю...')
     serv.autorize({ token: user.input.body }, (res) => {
@@ -32,7 +26,7 @@ function ckeck_token_in_input(user, nextStep) {
                 }
             })
         } else {
-            user.done(`Неверный ключ. Уточните свой токен в [личном профиле](https://staff.swift-english.com/profile)`)
+            user.done(`Неверный ключ. Уточните свой токен в [личном профиле](https://app.swift-english.com/profile)`)
         }
     })
 }

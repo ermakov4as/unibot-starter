@@ -46,10 +46,7 @@ function _can_you_do_it_output(phrase, user) {
         user.addMessage(phrase.answer);
     }
     user.trainDict.phrase = phrase
-    user.addKeyboard([
-        ['ℹ', '❌ Нет', '✅ Да'],
-        ['⬅️']
-    ])
+    user.addKeyboard([['ℹ', '❌ Нет', '✅ Да'], ['⬅️']])
     user.done()
 }
 
@@ -61,9 +58,7 @@ function _all_phrases_done(user) {
             user.state = 'main'
             user.Fsx()
         } else {
-            user.addKeyboard([
-                ['⬅️']
-            ])
+            user.addKeyboard([['⬅️']])
             user.done()
         }
     })
@@ -78,22 +73,16 @@ function remeber_phrase(doYouKnow) {
                 return
             }
             let phrase = user.trainDict.phrase
-            user.addMessage(`${phrase.question}\n${phrase.answer}`)
+            user.addMessage(`Проверка:\n🇬🇧${phrase.question}\n🇷🇺${phrase.answer}`)
             if (user.addAudio(phrase.question_audio))
                 user.addAudio(phrase.question_audio)
             user.state = 'dict_tren_checking_confirm'
             nextStep(user)
-                /*serv.putNextStateDict({ "key": user.key, "id_unit": phrase.id }, (res) => {
-                    user.addMessage(`Перенес на следующую стадию 👍\n${phrase.question}\n${phrase.answer}`)
-                    if (user.addAudio(phrase.question_audio))
-                        user.addAudio(phrase.question_audio)
-                    _main_or_next(user, nextStep)
-                })*/
         }
     else
         return (user, nextStep) => {
             let phrase = user.trainDict.phrase
-            user.addMessage(`${phrase.question}\n${phrase.answer}`)
+            user.addMessage(`🇬🇧${phrase.question}\n🇷🇺${phrase.answer}`)
             if (user.addAudio(phrase.question_audio))
                 user.addAudio(phrase.question_audio)
             _main_or_next(user, nextStep)

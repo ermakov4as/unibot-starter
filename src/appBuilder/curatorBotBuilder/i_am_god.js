@@ -25,7 +25,7 @@ const PROGRAMMS = {
     linkinsert: {
         func: () => { },
         desc: 'Прсто пример как вставлять ссылки',
-        example: '[якорь](https://app.swift-english.com/dictionary/?auth_token=KEY>)'
+        example: '[якорь](https://app.swift-english.com/dictionary/?auth_token=KEY)'
     },
     rename: {
         func: rename,
@@ -51,11 +51,6 @@ const PROGRAMMS = {
         func: main,
         desc: 'Отправляет пользователя на глвную',
         example: '$main Доступен новый функцинал'
-    },
-    dialog: {
-        func: dialog,
-        desc: 'Отправляет пользователя на страницу диалога',
-        example: '$dialog Доступен новый функцинал'
     },
     addphrases: {
         func: addphrases,
@@ -238,25 +233,6 @@ function main(curator, client, argv) {
                 curator.send(`Отправили всех зарегистрированных пользователей на главную`)
             else
                 curator.send(`Отправили пользователя ${client.name} на главную`)
-        }
-    }
-}
-
-function dialog(curator, client, argv) {
-    if (client.key)
-        client.state = 'dialog'
-    else
-        client.state = 'auth_help'
-    if (argv.length) {
-        let msg = client.insertAttrs(argv.join(' '))
-        client.addMessage(msg)
-        client.Fsx()
-        if (!SENDED_ONCE) {
-            SENDED_ONCE = true
-            if (TO_MANY)
-                curator.send(`Отправили всех пользователей на страницу диалога`)
-            else
-                curator.send(`Отправили пользователя ${client.name} на страницу диалога`)
         }
     }
 }

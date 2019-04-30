@@ -35,7 +35,6 @@ module.exports = class UniBot {
                     if (user.state in this.states) {
                         this.states[user.state].Fsx(user)
                     }
-
                 })
             })
         })

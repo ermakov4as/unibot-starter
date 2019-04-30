@@ -18,11 +18,11 @@ function get_status_of_my_dict(user) {
             reversed: res[2].count
         }
         if (user.studing.total) {
-            let msg = `Фраз в словаре: *${user.studing.total}*\n\
-    Стадия 1 (🇬🇧📖)..........${user.studing.text}\n\
-    Стадия 2 (🇬🇧🎧)..........${user.studing.sound}\n\
-    Стадия 3 (🇷🇺📖)..........${user.studing.reversed}\n\
-Что будем тренировать?`
+            let msg = `Фраз в словаре: *${res[0].count + res[1].count + res[2].count}*\n` +
+                `\t\t1. Понимание текста(🇬🇧📖)................${res[0].count}\n` +
+                `\t\t2. Восприятие на слух(🇬🇧🎧)..............${res[1].count}\n` +
+                `\t\t3. Построение фразы(🇷🇺=>🇬🇧)...........${res[2].count}\n` +
+                `Что будем тренировать?`
             keyboardType = []
             keyboardPlayer = []
             if (user.studing.text)
