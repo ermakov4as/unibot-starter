@@ -11,7 +11,7 @@ const c = console.log
 let IN_PROCESS = false
 let MAIN_PARAM= {
     type: 'будет выбран',
-    count: 100,
+    count: 50,
     order: [{ ru: 6 }, { en: 2 }, { en: 2 }]
 }
 
@@ -21,7 +21,7 @@ function which_state_are_you_gonna_train(user) {
         return
     }
     serv.getDictInfo({ key: user.key }, (res) => {
-        if (res[0].count + res[1].count + res[2].count + res[3].count) {
+        if (res[0] && res[0].count + res[1].count + res[2].count + res[3].count) {
             let msg = `Фраз в словаре: *${res[0].count + res[1].count + res[2].count + res[3].count}*\n` +
                 `\t\t1. Понимание текста(🇬🇧📖)................${res[0].count}\n` +
                 `\t\t2. Восприятие на слух(🇬🇧🎧)..............${res[1].count}\n` +
@@ -44,8 +44,10 @@ function which_state_are_you_gonna_train(user) {
             keyboard.push(lowerLine)
             user.addKeyboard(keyboard)
             user.done(msg)
-        } else
-            user.send('Для генерации ААМ-файлов, в словаре должны фразы на стадии 🇬🇧🎧 или выше.')
+        } else{
+            с(res[0])
+            user.send('Нет фраз для генерации')
+        }
     })
 }
 

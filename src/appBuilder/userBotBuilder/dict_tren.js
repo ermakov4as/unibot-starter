@@ -7,17 +7,18 @@ module.exports = {
 const instances = require('../../instances')
 const t4 = instances.time4
 const serv = instances.server
-
+const c = console.log
 
 function get_status_of_my_dict(user) {
     serv.getDictInfo({ key: user.key }, (res) => {
+        
         user.studing = {
             total: res[0].count + res[1].count + res[2].count,
             text: res[0].count,
             sound: res[1].count,
             reversed: res[2].count
         }
-        if (user.studing.total) {
+        if (res[0] && res[0].count + res[1].count + res[2].count) {
             let msg = `Фраз в словаре: *${res[0].count + res[1].count + res[2].count}*\n` +
                 `\t\t1. Понимание текста(🇬🇧📖)................${res[0].count}\n` +
                 `\t\t2. Восприятие на слух(🇬🇧🎧)..............${res[1].count}\n` +
@@ -25,12 +26,12 @@ function get_status_of_my_dict(user) {
                 `Что будем тренировать?`
             keyboardType = []
             keyboardPlayer = []
-            if (user.studing.text)
+            if (res[0].count)
                 keyboardType.push('🇬🇧📖')
-            if (user.studing.sound) {
+            if (res[1].count) {
                 keyboardType.push('🇬🇧🎧')
             }
-            if (user.studing.reversed) {
+            if (res[2].count) {
                 keyboardType.push('🇷🇺=>🇬🇧')
             }
             let keyboardResult = [keyboardType]
@@ -39,8 +40,10 @@ function get_status_of_my_dict(user) {
             keyboardResult.push(['⬅️', '🎲'])
             user.addKeyboard(keyboardResult)
             user.done(msg)
-        } else
+        } else{
+            console.log(res)
             user.send('В словаре нет фраз😕')
+        }
     })
 }
 

@@ -35,13 +35,23 @@ function remeber_phrase_confirm(doYouKnow) {
             let phrase = user.trainDict.phrase
             serv.putNextStateDict({ "key": user.key, "id_unit": phrase.id }, (res) => {
                 user.addMessage(`Перенес на следующую стадию 👍`)
-                user.state = 'dict_tren_checking'
+                if (user.ntf.fromNotify)
+                    user.state = 'main'
+                else {
+                    user.ntf.fromNotify = false
+                    user.state = 'dict_tren_checking'
+                }
                 nextStep(user)
             })
         }
     else
         return (user, nextStep) => {
-            user.state = 'dict_tren_checking'
+            if (user.ntf.fromNotify)
+                user.state = 'main'
+            else {
+                user.ntf.fromNotify = false
+                user.state = 'dict_tren_checking'
+            }
             nextStep(user)
         }
 }
