@@ -52,7 +52,7 @@ userBot.addState('main')
 
 userBot.addState('dict_tren')
     .addFsx(ubb.dict_tren.get_status_of_my_dict)
-    .onButton('⬅️', ubb.dict_main.go_to('main'))
+    .onButton('⬅️', ubb.dict_tren.go_to_main)
     .onButton('🇬🇧📖', ubb.dict_tren.set_type_and_go_to_dict_tren_checking('text'))
     .onButton('🇬🇧🎧', ubb.dict_tren.set_type_and_go_to_dict_tren_checking('sound'))
     .onButton('🇷🇺=>🇬🇧', ubb.dict_tren.set_type_and_go_to_dict_tren_checking('reversed'))

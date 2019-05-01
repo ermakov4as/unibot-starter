@@ -119,8 +119,13 @@ module.exports = class Server {
         request.get(this.host + path, option, (error, response, body) => {
             if (200 == response.statusCode)
                 callback(body.url)
-            else
+            else{
+                c(`server response error (${response.statusCode})`)
+                c('Option:' + JSON.stringify(option, false, 2))
+                c('Body response:' + JSON.stringify(body, false, 2))
                 callback(false)
+            }
+                
         })
     }
 
@@ -312,9 +317,9 @@ module.exports = class Server {
                 if (200 == response.statusCode)
                     callback(body)
                 else {
-                    c(body)
                     c(API[settings.action].type + ':' + this.host + path)
                     c('JSON:' + JSON.stringify(option.json, false, 2))
+                    c('response:' + JSON.stringify(response, false, 2))
                     callback(false)
                 }
             })
